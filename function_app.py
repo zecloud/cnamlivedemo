@@ -62,7 +62,7 @@ def reactblobfunc(myblob: func.InputStream):
 #                 connection="BlobStorageConnectionString")
 @app.blob_output(arg_name="outputblob", path="test/{rand-guid}.txt",
                 connection="BlobStorageConnectionString")
-@app.service_bus_queue_output(arg_name="sbqueue", queue_name="cnammessage", connection="ServiceBusConnectionString")
+@app.service_bus_queue_output(arg_name="sbqueue", queue_name="container", connection="ServiceBusConnectionString")
 def hellofile(azqueue: func.QueueMessage, outputblob: func.Out[str], sbqueue: func.Out[str]):
     logging.info('Python Queue trigger processed a message: %s',
                 azqueue.get_body().decode('utf-8'))
