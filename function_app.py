@@ -26,6 +26,9 @@ def helloworld(req: func.HttpRequest) -> func.HttpResponse:
              status_code=200
         )
 
+@app.service_bus_queue_trigger(arg_name="msg", queue_name="cnammessage", connection="ServiceBusConnectionString")
+def sbqtriggerfunc(msg: func.ServiceBusMessage):
+    logging.info('Python ServiceBus queue trigger processed message: %s', msg.get_body().decode('utf-8'))
 
 @app.blob_trigger(arg_name="myblob", path="test",
                                connection="BlobStorageConnectionString") 
