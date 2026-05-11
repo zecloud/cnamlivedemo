@@ -30,6 +30,8 @@ def helloworld(req: func.HttpRequest) -> func.HttpResponse:
 def sbqtriggerfunc(msg: func.ServiceBusMessage):
     logging.info('Python ServiceBus queue trigger processed message: %s', msg.get_body().decode('utf-8'))
 
+
+
 @app.blob_trigger(arg_name="myblob", path="test",
                                connection="BlobStorageConnectionString") 
 def reactblobfunc(myblob: func.InputStream):
@@ -60,7 +62,9 @@ def reactblobfunc(myblob: func.InputStream):
 #                 connection="BlobStorageConnectionString")
 @app.blob_output(arg_name="outputblob", path="test/{rand-guid}.txt",
                 connection="BlobStorageConnectionString")
-def hellofile(azqueue: func.QueueMessage, outputblob: func.Out[str]):
+@app.service_bus_queue_output(arg_name="sbqueue", queue_name="cnammessage", connection="ServiceBusConnectionString")
+def hellofile(azqueue: func.QueueMessage, outputblob: func.Out[str], sbqueue: func.Out[str]):
     logging.info('Python Queue trigger processed a message: %s',
                 azqueue.get_body().decode('utf-8'))
     outputblob.set(azqueue.get_body().decode('utf-8'))
+    sbqueue.set(azqueue.get_body().decode('utf-8'))
